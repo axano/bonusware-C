@@ -21,11 +21,9 @@
 
 int main() {
     HKEY hkey;
-    DWORD disp;
     BYTE * b[0x1];
     b[0] = 1;
     RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Keyboard Layout", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, &hkey);
-    RegSetValueEx(hkey, L"Scancode Map", 0, REG_BINARY, b, 0x1);
+    RegSetValueEx(hkey, L"test", 0, REG_BINARY, b, 0x1);
     return (0);
 }
-
