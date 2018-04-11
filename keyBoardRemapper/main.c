@@ -19,11 +19,43 @@
     http://www.ee.bgu.ac.il/~microlab/MicroLab/Labs/ScanCodes.htm  	 
  */
 
-int main() {
+
+
+int main(void) {
     HKEY hkey;
-    BYTE * b[0x1];
-    b[0] = 1;
-    RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Control\\Keyboard Layout", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, &hkey);
-    RegSetValueEx(hkey, L"test", 0, REG_BINARY, b, 0x1);
-    return (0);
+    char registryKeyValue[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    size_t size = sizeof (registryKeyValue); 
+    LONG result_open, result_close, result_write;
+
+    printf("Opening Key...\n");
+    result_open = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+            "SYSTEM\\CurrentControlSet\\Control\\Keyboard Layout",
+            0, KEY_WRITE, &hkey);
+
+    if (result_open != ERROR_SUCCESS) {
+        if (result_open == ERROR_FILE_NOT_FOUND) {
+            printf("Not found\n");
+        } else {
+            printf("Error Opening Key\n");
+        }
+    } else {
+        printf("SUCCESS!!!\n");
+    }
+
+    printf("Writing Value named testval\n");
+    result_write = RegSetValueEx(hkey, "bartolomew", 0, REG_BINARY, registryKeyValue, size);
+    if (result_write != ERROR_SUCCESS) {
+        printf("Error Writing Value\n");
+    } else {
+        printf("SUCCESS!!!\n");
+    }
+    printf("Closing Key...\n");
+    result_close = RegCloseKey(hkey);
+    if (result_close != ERROR_SUCCESS) {
+        printf("Error Closing Key\n");
+    } else {
+        printf("SUCCESS!!!!\n");
+    }
+
+    return 0;
 }
